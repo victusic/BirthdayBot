@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+configurate/
+
+# TypeScript
+*.tsbuildinfo
+*.js
+*.map
+*.ts
+*.d.ts
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
