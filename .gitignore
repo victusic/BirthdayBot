@@ -2,13 +2,6 @@
 node_modules/
 configurate/
 
-# TypeScript
-*.tsbuildinfo
-*.js
-*.map
-*.ts
-*.d.ts
-
 # Visual Studio Code
 .vscode/
 
