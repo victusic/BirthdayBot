@@ -15,6 +15,7 @@ bot.start(async (ctx: typeof ContextMessageUpdate) => {
       userId,
     ]);
     if (findUser.rowCount === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const req = await db.query(
         `INSERT INTO "User" (chatId, "name", mailingDateId, mailingConfigurationId, timeZoneId, mailingTime) values ($1, $2, 1, 1, 1, '07:00') RETURNING *`,
         [userId, username],
@@ -32,7 +33,6 @@ bot.start(async (ctx: typeof ContextMessageUpdate) => {
       },
     );
 
-    // Отправляем инлайн-кнопки
     ctx.reply(
       "приветственное сообщение",
       {
@@ -50,9 +50,23 @@ bot.start(async (ctx: typeof ContextMessageUpdate) => {
   }
 });
 
+bot.action("Настройки", (ctx: typeof ContextMessageUpdate) => {
+  ctx.reply("Кнопки:", {
+    reply_markup: {
+      keyboard: [
+        [{ text: "Текущие настройки", callback_data: "/Настройки" }],
+        [{ text: "Назад", callback_data: "/Настройки" }],
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: false,
+    },
+    parse_mode: "Markdown",
+  });
+});
+
 //шаблоны
 
-bot.command("ds", (ctx: typeof ContextMessageUpdate) => {
+bot.command("Настройки", (ctx: typeof ContextMessageUpdate) => {
   ctx.reply("Кнопки:", {
     reply_markup: {
       keyboard: [
@@ -99,10 +113,6 @@ bot.command("tk", (ctx: typeof ContextMessageUpdate) => {
       ],
     },
   });
-});
-
-bot.action("button1", (ctx: typeof ContextMessageUpdate) => {
-  ctx.reply("Вы нажали на кнопку 1");
 });
 
 bot.action("button2", (ctx: typeof ContextMessageUpdate) => {
