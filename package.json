@@ -1,0 +1,42 @@
+{
+  "name": "birthdaybot2.0",
+  "version": "1.0.0",
+  "description": "tg bot",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node ./src/index.ts",
+    "start": "ts-node ./src/index.ts",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node-telegram-bot-api": "^0.63.2",
+    "emoji-regex": "^10.3.0",
+    "grapheme-splitter": "^1.0.4",
+    "luxon": "^3.4.4",
+    "moment": "^2.29.4",
+    "node-schedule": "^2.1.1",
+    "node-telegram-bot-api": "^0.64.0",
+    "telegraf": "^4.15.0",
+    "typescript": "^5.2.2"
+  },
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "es2022",
+    "module": "commonjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.2",
+    "@types/pg": "^8.10.9",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3",
+    "ts-node": "^10.9.1"
+  }
+}

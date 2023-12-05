@@ -1,0 +1,12 @@
+# Node.js
+node_modules/
+configurate/
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
