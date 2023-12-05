@@ -5,13 +5,18 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.ts",
-    "start": "node dist/index.js",
+    "start": "ts-node ./src/index.ts",
     "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/node-telegram-bot-api": "^0.63.2",
+    "emoji-regex": "^10.3.0",
+    "grapheme-splitter": "^1.0.4",
+    "luxon": "^3.4.4",
+    "moment": "^2.29.4",
+    "node-schedule": "^2.1.1",
     "node-telegram-bot-api": "^0.64.0",
     "telegraf": "^4.15.0",
     "typescript": "^5.2.2"
