@@ -24,7 +24,7 @@
   <li>Рассылка о днях рождения/праздниках в этом месяце</li>
 </ul>
 
-<h4>Ссылка на проект: https://t.me/AnnunciationBirthdayBo</h4> 
+<h4>Ссылка на проект: https://t.me/AnnunciationBirthdayBot</h4> 
 
 
 <h6>Проект для себя</h6>
