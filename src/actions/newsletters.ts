@@ -479,3 +479,10 @@ export const nowMonthListbyChatId = async (chatId: string) => {
     disable_web_page_preview: true,
   })}
 };
+
+export const updateRealese = async (chatId: string, messageText: string) => {
+  messageText = messageText.replace(/\\n/g, '  \n');
+  await bot.telegram.sendMessage(chatId, messageText, {
+    parse_mode: 'Markdown',
+  });
+};

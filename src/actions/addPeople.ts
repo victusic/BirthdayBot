@@ -185,8 +185,8 @@ export const setRecordPeople = async (ctx: typeof ContextMessageUpdate) => {
     `INSERT INTO "BirthdayPeople" ("name", sticker, birthday, userid) VALUES ($1, $3, $2, $4) RETURNING *`,
     [
       newPeople[userId].name,
-      newPeople[userId].date,
-      //formattedDate,
+      //newPeople[userId].date,
+      formattedDate,
       newPeople[userId].sticker,
       userForChatId.rows[0].id,
     ],
