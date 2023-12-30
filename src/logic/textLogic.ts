@@ -21,6 +21,7 @@ import {
   mainSettings,
   nowConfigurationSettings,
   setTimeSettings,
+  setTimeZoneSettings,
 } from "../actions/settings";
 
 const { ContextMessageUpdate } = require("telegraf");
@@ -71,12 +72,16 @@ export function handleSwitchLogic(
         setConversationState(ctx, "settingsMain");
       }
       break;
-    case "settingsTime":
-      {
-        userText === "Назад" && mainSettings(ctx);
-        setConversationState(ctx, "settingsMain");
+    case "settingsTime": {
+      if (userText === "Пропустить") {
+        setTimeZoneSettings(ctx, 999);
+        setConversationState(ctx, "settingsTimeZone");
+        break;
       }
+      userText === "Назад" && mainSettings(ctx);
+      setConversationState(ctx, "settingsMain");
       break;
+    }
     case "settingsTimeZone":
       if (userText === "Назад") {
         mainSettings(ctx);
