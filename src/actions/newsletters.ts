@@ -155,7 +155,7 @@ export const mainNewsletterPeople = async (
     });
   }
 
-  const addMessagePeoples = (peoples: Person[], startText: string) => {
+  const addMessagePeoples = (peoples: Person[], addAge: boolean, startText: string) => {
     messageText += startText + "\n";
     const peoplesBody: string = peoples
       .map(({ sticker, name, birthday }) => {
@@ -172,22 +172,25 @@ export const mainNewsletterPeople = async (
           (currentDate.getMonth() === birthDate.getMonth() &&
             currentDate.getDate() >= birthDate.getDate());
 
-        const age = hasBirthdayOccurredThisYear
+        let age = hasBirthdayOccurredThisYear
           ? currentDate.getFullYear() - birthDate.getFullYear()
           : currentDate.getFullYear() - birthDate.getFullYear() - 1;
+
+        //если др будет с завтрашнего дня, добавляем год
+        age = addAge ? age + 1 : age 
 
         // Проверка на кол-во лет
         let ageText = "";
         if (age % 10 === 1 && age !== 11) {
-          ageText = `${age} год`;
+          ageText = `исп ${age} год`;
         } else if (
           // eslint-disable-next-line operator-linebreak
           (age % 10 === 2 || age % 10 === 3 || age % 10 === 4) &&
           (age < 10 || age > 20)
         ) {
-          ageText = `${age} года`;
+          ageText = `исп ${age} года`;
         } else {
-          ageText = `${age} лет`;
+          ageText = `исп ${age} лет`;
         }
 
         return `${sticker} ${name} - ${formattedDate} - ${ageText}`;
@@ -219,7 +222,7 @@ export const mainNewsletterPeople = async (
   const nowMonth = new Date(today).getMonth();
 
   const todayData = getPeoples(nowDay, nowMonth);
-  if(todayData.length > 0) addMessagePeoples(todayData, "Cегодня:");
+  if(todayData.length > 0) addMessagePeoples(todayData, false, "Cегодня:");
   countPeoples += todayData.length;
 
   if(userData.mailingdateid !== 4){
@@ -229,7 +232,7 @@ export const mainNewsletterPeople = async (
     const tomorrowMonth = tomorrow.getMonth();
 
     const tomorrowData = getPeoples(tomorrowDay, tomorrowMonth);
-    if(tomorrowData.length > 0) addMessagePeoples(tomorrowData, "Завтра:");
+    if(tomorrowData.length > 0) addMessagePeoples(tomorrowData, true, "Завтра:");
     countPeoples += tomorrowData.length;
   }
 
@@ -244,7 +247,7 @@ export const mainNewsletterPeople = async (
     const after3DaysMonth = after3Days.getMonth();
 
     const after3DaysData = getPeoples(after3DaysDay, after3DaysMonth);
-    if(after3DaysData.length > 0) addMessagePeoples(after3DaysData, `Через 3 дня (${currentDayOfWeekInRussian}):`);
+    if(after3DaysData.length > 0) addMessagePeoples(after3DaysData, true, `Через 3 дня (${currentDayOfWeekInRussian}):`);
     countPeoples += after3DaysData.length;
   }
 
@@ -255,7 +258,7 @@ export const mainNewsletterPeople = async (
     const afterWeekMonth = afterWeek.getMonth();
 
     const afterWeekData = getPeoples(afterWeekDay, afterWeekMonth);
-    if(afterWeekData.length > 0) addMessagePeoples(afterWeekData, "Через неделю:");
+    if(afterWeekData.length > 0) addMessagePeoples(afterWeekData, true, "Через неделю:");
     countPeoples += afterWeekData.length;
   }
   {countPeoples > 0 ? await bot.telegram.sendMessage(chatId, messageText, {
@@ -298,8 +301,8 @@ export const mainNewsletterHolidays = async (
   const addMessagePeoples = (holidays: Holiday[], startText: string) => {
     messageText += startText + "\n";
     const holidaysBody: string = holidays
-      .map(({ sticker, name }) => {
-        return `${sticker} ${name}`;
+      .map(({ sticker, name, link }) => {
+        return `${sticker} [${name}](${link})`;
       })
       .join("\n");
       messageText += `\n` + holidaysBody + `\n\n`;
@@ -475,4 +478,11 @@ export const nowMonthListbyChatId = async (chatId: string) => {
     parse_mode: 'Markdown',
     disable_web_page_preview: true,
   })}
+};
+
+export const updateRealese = async (chatId: string, messageText: string) => {
+  messageText = messageText.replace(/\\n/g, '  \n');
+  await bot.telegram.sendMessage(chatId, messageText, {
+    parse_mode: 'Markdown',
+  });
 };

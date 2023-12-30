@@ -312,7 +312,8 @@ export const editPeopleDate = async (
     [{ text: "Отмена", callback_data: "Отмена" }],
   ];
 
-  const nameRegex = /^[a-zA-Zа-яА-Я0-9\s-]{2,64}$/;
+  // eslint-disable-next-line no-useless-escape
+  const nameRegex = /^[a-zA-Zа-яА-ЯёЁ0-9\s,\-.\+:;'"`!#№;%?()]{2,64}$/;
   const ValidateName = () => nameRegex.test(userText);
   const isValidName = ValidateName();
 

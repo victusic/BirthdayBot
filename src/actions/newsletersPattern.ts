@@ -2,6 +2,7 @@ import {
   mainNewsletterHolidays,
   mainNewsletterPeople,
   nowMonthListbyChatId,
+  updateRealese,
 } from "./newsletters";
 
 const db = require("../../configurate/db");
@@ -18,6 +19,10 @@ interface User {
 export async function newsletersPattern() {
   const findUsersQ = await db.query(
     `SELECT id, chatid, mailingconfigurationid, (SELECT "name" FROM "Timezone" WHERE "Timezone".id = timezoneid) AS userTimezone, mailingtime FROM "User"`,
+  );
+
+  const findSystemLetters = await db.query(
+    `SELECT id, text FROM "SystemLetters" WHERE "implemented" = false`,
   );
 
   const findUsers = findUsersQ.rows;
@@ -45,5 +50,17 @@ export async function newsletersPattern() {
       if (user.mailingconfigurationid !== 3)
         mainNewsletterHolidays(user.chatid);
     }
+
+    //обновление
+    if (findSystemLetters.rows[0])
+      updateRealese(user.chatid, findSystemLetters.rows[0].text);
   });
+
+  if (findSystemLetters.rows[0]) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const delSendSystemLetters = await db.query(
+      `UPDATE "SystemLetters" SET "implemented" = true WHERE id = $1`,
+      [findSystemLetters.rows[0].id],
+    );
+  }
 }

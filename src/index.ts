@@ -26,6 +26,8 @@ rebootMessage();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const job = schedule.scheduleJob("0 * * * *", newsletersPattern);
+//для тестов
+//const job = schedule.scheduleJob("* * * * *", newsletersPattern);
 
 //старт
 bot.start(async (ctx: typeof ContextMessageUpdate) => {

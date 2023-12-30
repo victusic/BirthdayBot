@@ -149,19 +149,48 @@ export const setDateSettings = async (
   }
 };
 
+interface TimezoneValue {
+  id: number;
+  name: string;
+  value: number;
+}
+
 //время рассылки
 export const timeSettings = async (ctx: typeof ContextMessageUpdate) => {
-  const keyboardButtons = [[{ text: "Назад", callback_data: "Назад" }]];
-  const configurateTime = await db.query(`SELECT * FROM "Timezone"`);
-
-  const inlineButtons = configurateTime.rows.map(
-    (value: { id: number; name: string }) => [
-      {
-        text: value.name,
-        callback_data: `setTime:${value.id}`,
-      },
-    ],
+  const keyboardButtons = [
+    [{ text: "Пропустить", callback_data: "Пропустить" }],
+    [{ text: "Отмена", callback_data: "Отмена" }],
+  ];
+  const configurateTime = await db.query(
+    'SELECT * FROM "Timezone" ORDER BY id ASC',
   );
+
+  //формирование матрицы поясов
+  const inlineButtons: { text: string; callback_data: string }[][] = [];
+  configurateTime.rows.map((value: TimezoneValue, index: number) => {
+    const button = {
+      text: value.name,
+      callback_data: `setTime:${value.id}`,
+    };
+    //3 столбца
+    const rowIndex = Math.floor(index / 3);
+    if (!inlineButtons[rowIndex]) {
+      inlineButtons[rowIndex] = [button];
+    } else {
+      inlineButtons[rowIndex].push(button);
+    }
+  });
+  // Если количество кнопок не делится на 3, то пустые кнопки
+  const remainder = inlineButtons.length % 3;
+  if (remainder !== 0) {
+    const emptyButtonsCount = 3 - remainder;
+    inlineButtons.push(
+      Array.from({ length: emptyButtonsCount }, () => ({
+        text: " ",
+        callback_data: "empty",
+      })),
+    );
+  }
 
   await ctx.reply("Хорошо, укажите ваш часовой пояс", {
     reply_markup: {
@@ -189,17 +218,23 @@ export const setTimeZoneSettings = async (
   timeValueId: number,
 ) => {
   const userId = ctx.from?.id;
-  const timezoneIdValues = await db.query(
-    `UPDATE "User" SET "timezoneid" = $1 WHERE "chatid" = $2`,
-    [timeValueId, userId],
-  );
-  if (timezoneIdValues.rowCount > 0) {
-    await ctx.reply(
-      "Замечательно, теперь укажите время, в которое я вам буду присылать сообщения (только в часах), пример: 11:00",
+  if (timeValueId !== 999) {
+    const timezoneIdValues = await db.query(
+      `UPDATE "User" SET "timezoneid" = $1 WHERE "chatid" = $2`,
+      [timeValueId, userId],
     );
+    if (timezoneIdValues.rowCount > 0) {
+      await ctx.reply(
+        "Замечательно, теперь укажите время, в которое я вам буду присылать сообщения (только в часах), пример: 11:00",
+      );
+    } else {
+      await ctx.reply(
+        "Произошла ошибка при изменении настроек, попробуйте ещё раз",
+      );
+    }
   } else {
     await ctx.reply(
-      "Произошла ошибка при изменении настроек, попробуйте ещё раз",
+      "Замечательно, теперь укажите время, в которое я вам буду присылать сообщения (только в часах), пример: 11:00",
     );
   }
 };
