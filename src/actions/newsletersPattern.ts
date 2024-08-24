@@ -1,7 +1,7 @@
 import {
   mainNewsletterHolidays,
   mainNewsletterPeople,
-  nowMonthListbyChatId,
+  //nowMonthListbyChatId,
   updateRealese,
 } from "./newsletters";
 
@@ -37,12 +37,12 @@ export async function newsletersPattern() {
     const userhour = parseInt(timeComponents[0], 10);
 
     //текущий день
-    const currentDay = now.day;
+    //const currentDay = now.day;
 
     //ежемесячная рассылка
-    if (currentDay === 1) {
+    /*if (currentDay === 1) {
       nowMonthListbyChatId(user.chatid);
-    }
+    }*/
 
     //основная рассылка
     if (currentHour === userhour) {
