@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "start": "ts-node ./src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json,md}\""
   },
   "author": "",
   "license": "ISC",
